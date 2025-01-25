@@ -41,7 +41,7 @@ public class LoadSchematic {
             Bukkit.getLogger().info("Name: " + format.getPrimaryFileExtension());
             Bukkit.getLogger().info("Clipboard min point: " + clipboard.getMinimumPoint());
         } catch (IOException e) {
-            logger.error("Failed to read the file: {}", file.getName(), e);
+            e.printStackTrace();
         }
 
         if (clipboard == null) {
