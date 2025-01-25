@@ -20,8 +20,11 @@ import pandaraShop.manager.UnrentShop;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import static com.sk89q.worldedit.WorldEdit.logger;
 
 public class ActivityCounter implements Listener {
 
@@ -38,7 +41,7 @@ public class ActivityCounter implements Listener {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (player != null) {
                         if (player.getLocation().getWorld() != null && player.getLocation().getWorld().getName().equalsIgnoreCase("shop")) {
-                            file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), player.getUniqueId() + ".yml");
+                            file = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop")).getDataFolder(), player.getUniqueId() + ".yml");
                             if (file.exists()) {
                                 RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
                                 RegionManager regions = container.get(BukkitAdapter.adapt(Bukkit.getWorld("shop")));
@@ -52,7 +55,7 @@ public class ActivityCounter implements Listener {
                                         try {
                                             editFile.save(file);
                                         } catch (IOException e)  {
-                                            e.printStackTrace();
+                                            logger.error("Failed to save the file: {}", file.getName(), e);
                                         }
                                     }
                                 }
@@ -79,10 +82,10 @@ public class ActivityCounter implements Listener {
                                 long result = now-then;
 
                                 long d = TimeUnit.MILLISECONDS.toDays(result);
-                                result -= TimeUnit.DAYS.toMillis(d);
-                                long h = TimeUnit.MILLISECONDS.toHours(result);
-                                result -= TimeUnit.HOURS.toMillis(h);
-                                long m = TimeUnit.MILLISECONDS.toMinutes(result);
+                                //result -= TimeUnit.DAYS.toMillis(d);
+                                //long h = TimeUnit.MILLISECONDS.toHours(result);
+                                //result -= TimeUnit.HOURS.toMillis(h);
+                                //long m = TimeUnit.MILLISECONDS.toMinutes(result);
 
                                 if (d >= 30) {
                                     RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();

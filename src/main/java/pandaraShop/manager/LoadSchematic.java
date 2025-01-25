@@ -22,14 +22,12 @@ import java.io.IOException;
 
 public class LoadSchematic {
 
-    private static File file;
-
     public static void place(Location loc, String size) throws WorldEditException {
 
         World world = Bukkit.getWorld("shop");
         if (world == null) {return;}
 
-        file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), "/schematics/"+size+".schem");
+        File file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), "/schematics/" + size + ".schem");
         Clipboard clipboard = null;
         ClipboardFormat format = ClipboardFormats.findByFile(file);
 

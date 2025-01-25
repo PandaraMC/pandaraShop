@@ -15,8 +15,6 @@ import java.util.UUID;
 public class ShopOwnersList {
 
     static ArrayList<String> list = new ArrayList<>();
-    private static File file;
-    private static FileConfiguration editFile;
 
     public static void listMe(UUID uuid) {
 
@@ -29,9 +27,9 @@ public class ShopOwnersList {
         int count = 0;
         for (int x = 0; (x-length) <0; x++) {
             String filename = Arrays.stream(st).toList().toString().replace("[","").replace("]","").split(", ")[count];
-            file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), filename);
+            File file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), filename);
             if (file.exists()) {
-                editFile = YamlConfiguration.loadConfiguration(file);
+                FileConfiguration editFile = YamlConfiguration.loadConfiguration(file);
                 String owner = (String) editFile.get("Shop.Shopname");
                 if (owner != null) {
                     list.add(owner);

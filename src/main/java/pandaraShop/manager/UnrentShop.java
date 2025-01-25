@@ -21,27 +21,23 @@ import java.util.UUID;
 
 public class UnrentShop {
 
-    private static File file;
-    private static FileConfiguration editFile;
-
     public static void onUnrent(UUID uuid, RegionManager regions) throws WorldEditException {
 
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) {return;}
 
-        file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), player.getUniqueId() + ".yml");
+        File file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), player.getUniqueId() + ".yml");
 
         if (!file.exists()) {
             player.sendMessage(ChatColor.RED + "You are not currently renting a shop or the shop you are member of isn't primarily yours to unrent!");
             return;
         }
 
-        editFile = YamlConfiguration.loadConfiguration(file);
+        FileConfiguration editFile = YamlConfiguration.loadConfiguration(file);
         Location shoplocation = new Location(Bukkit.getWorld("shop"), editFile.getInt("Shop.Center.x"), editFile.getInt("Shop.Center.y"), editFile.getInt("Shop.Center.z"));
 
 
         ApplicableRegionSet applicableRegionSet = regions.getApplicableRegions(BlockVector3.at(shoplocation.getBlockX(),shoplocation.getBlockY(),shoplocation.getBlockZ()));
-        String[] st = Main.getInstance().getDataFolder().list();
 
         for (ProtectedRegion region : applicableRegionSet.getRegions()) {
 

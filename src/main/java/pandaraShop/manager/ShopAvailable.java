@@ -16,9 +16,6 @@ import java.util.UUID;
 
 public class ShopAvailable {
 
-    private static File file;
-    private static FileConfiguration editFile;
-
     public static void rtp(UUID uuid, RegionManager regions) {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) {return;}
@@ -26,7 +23,7 @@ public class ShopAvailable {
         ArrayList<String> unrentedList = new ArrayList<>();
         int i = 0;
 
-        file = file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), uuid + ".yml");
+        File file = file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), uuid + ".yml");
 
         for (Object names : regions.getRegions().keySet().toArray()) {
             if (names.toString().toLowerCase().contains("shop")) {

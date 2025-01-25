@@ -23,11 +23,10 @@ public class ShopCommandManager implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
         // Check if player is a real player.
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(ChatColor.RED + "This command can only be run by a player.");
             return true;
         }
-        Player player = (Player) sender;
 
         // Check if world is valid and if the world has a region as per World edit.
         if (world == null) {

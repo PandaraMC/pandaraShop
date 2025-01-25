@@ -7,29 +7,27 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class CheckTime {
 
-    private static String filename;
-    private static File file;
-    private static FileConfiguration fc;
-
     public static void checkMe(UUID uuid, String string) {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) {return;}
 
+        String filename;
         if (Bukkit.getPlayerExact(string) != null) {
-            filename = Bukkit.getPlayerExact(string).getUniqueId().toString();
+            filename = Objects.requireNonNull(Bukkit.getPlayerExact(string)).getUniqueId().toString();
         }
         else {
             filename = string;
         }
-        file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), filename + ".yml");
+        File file = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop")).getDataFolder(), filename + ".yml");
         if (file.exists()) {
             if (player.isOp() || player.hasPermission("pandara.manager") || player.getName().equalsIgnoreCase(filename)) {
-                fc = YamlConfiguration.loadConfiguration(file);
+                FileConfiguration fc = YamlConfiguration.loadConfiguration(file);
                 long now = System.currentTimeMillis();
                 long then = (Long) fc.get("Shop.Date");
                 long result = now-then;

@@ -8,12 +8,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ShopTP {
-
-    private static File file;
-    private static FileConfiguration editFile;
 
     public static void tpMe(UUID uuid, UUID targ) {
 
@@ -21,12 +19,12 @@ public class ShopTP {
         Player shop = Bukkit.getPlayer(targ);
 
         if (player != null && shop != null) {
-            file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), shop.getUniqueId() + ".yml");
+            File file = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop")).getDataFolder(), shop.getUniqueId() + ".yml");
 
             if (file.exists()) {
-                editFile = YamlConfiguration.loadConfiguration(file);
+                FileConfiguration editFile = YamlConfiguration.loadConfiguration(file);
 
-                Location loc = new Location(Bukkit.getWorld("shop"),editFile.getInt("Shop.TP.x"),editFile.getInt("Shop.TP.y"),editFile.getInt("Shop.TP.z"),editFile.getInt("Shop.TP.yaw"),editFile.getInt("Shop.TP.pitch"));
+                Location loc = new Location(Bukkit.getWorld("shop"), editFile.getInt("Shop.TP.x"), editFile.getInt("Shop.TP.y"), editFile.getInt("Shop.TP.z"), editFile.getInt("Shop.TP.yaw"), editFile.getInt("Shop.TP.pitch"));
 
                 player.teleport(loc);
 

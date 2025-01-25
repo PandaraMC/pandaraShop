@@ -21,9 +21,8 @@ public class CreateFile {
 
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) {return;}
-        String name = string;
 
-        file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), name + ".yml"); //Creates a physical file in the pandaraShop folder
+        file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), string + ".yml"); //Creates a physical file in the pandaraShop folder
         if (!file.exists()) {
             try {
                 file.createNewFile();

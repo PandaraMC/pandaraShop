@@ -14,8 +14,6 @@ public final class Main extends JavaPlugin {
     private static Main plugin;
     public static Main getInstance() {return plugin;}
 
-    public static YmlManager ymlManager;
-
     private void logStartupMessage() {
         Bukkit.getLogger().info("█ █");
         Bukkit.getLogger().info("█ █ █ █");

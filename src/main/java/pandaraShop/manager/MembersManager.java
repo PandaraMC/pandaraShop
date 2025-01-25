@@ -34,6 +34,7 @@ public class MembersManager {
                                     if (region.hasMembersOrOwners() && region.getMembers().contains(player.getUniqueId())) {
                                         editFile = YamlConfiguration.loadConfiguration(file);
                                         String owner = (String) editFile.get("Shop.Owner");
+                                        assert owner != null;
                                         if (region.getMembers().contains(UUID.fromString(owner))) {
                                             if (region.getMembers().size() <= 3) {
                                                 if (!region.getMembers().contains(member.getUniqueId())) {
@@ -96,6 +97,7 @@ public class MembersManager {
                                 if (region.hasMembersOrOwners() && region.getMembers().contains(player.getUniqueId())) {
                                     editFile = YamlConfiguration.loadConfiguration(file);
                                     String owner = (String) editFile.get("Shop.Owner");
+                                    assert owner != null;
                                     if (region.getMembers().contains(UUID.fromString(owner))) {
                                         if (region.getMembers().size() > 1) {
                                             if (region.getMembers().contains(member.getUniqueId())) {

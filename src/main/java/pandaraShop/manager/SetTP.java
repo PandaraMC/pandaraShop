@@ -13,13 +13,10 @@ import java.util.UUID;
 
 public class SetTP {
 
-    private static File file;
-    private static FileConfiguration editFile;
-
     public static void setTP(UUID uuid) {
 
         Player player = Bukkit.getPlayer(uuid);
-        file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), player.getUniqueId() + ".yml");
+        File file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), player.getUniqueId() + ".yml");
         Location loc = player.getLocation();
 
         if (!loc.getWorld().toString().equalsIgnoreCase("shop")) {
@@ -31,7 +28,7 @@ public class SetTP {
             player.sendMessage(ChatColor.GOLD + "You don't own a shop.");
         }
         else {
-            editFile = YamlConfiguration.loadConfiguration(file);
+            FileConfiguration editFile = YamlConfiguration.loadConfiguration(file);
 
             editFile.set("Shop.TP.x",loc.getX());
             editFile.set("Shop.TP.y",loc.getY());

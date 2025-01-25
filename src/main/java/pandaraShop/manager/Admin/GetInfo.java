@@ -15,9 +15,6 @@ import java.util.UUID;
 
 public class GetInfo {
 
-    private static File file;
-    private static FileConfiguration editFile;
-
     public static void checkMe(UUID uuid, RegionManager regions) {
 
         ArrayList<String> rentedList = new ArrayList<>();
@@ -56,9 +53,9 @@ public class GetInfo {
         player.sendMessage(ChatColor.GREEN + "For a total of "+ ChatColor.GOLD+u+ChatColor.GREEN+" ultra and "+ChatColor.GOLD+r+ChatColor.GREEN+" regular shops!");
         player.sendMessage(" ");
 
-        file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), player.getUniqueId() + ".yml");
+        File file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), player.getUniqueId() + ".yml");
         if (file.exists()) {
-            editFile = YamlConfiguration.loadConfiguration(file);
+            FileConfiguration editFile = YamlConfiguration.loadConfiguration(file);
             int x = editFile.getInt("Shop.Center.x");
             int y = editFile.getInt("Shop.Center.y");
             int z = editFile.getInt("Shop.Center.z");
