@@ -1,0 +1,17 @@
+name: pandaraShop
+version: '${project.version}'
+main: pandaraShop.Main
+api-version: 1.19
+authors: [ CheekyPandaBoy ]
+description: A shop plugin for Pandara
+depend:
+  - WorldGuard
+commands:
+  shop:
+    description: General shop command. It must be followed by an option.
+    permission: pandarashop.shop
+    permission-message: You do not have permission to use this command.
+  shopworld:
+    description: Teleports the player to the shop world.
+    permission: pandarashop.shopworld
+    permission-message: You do not have permission to use this command.
