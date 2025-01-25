@@ -55,7 +55,7 @@ public class SchematicManager {
             plugin.getLogger().info("Successfully restored " + targetFile.getName());
         } catch (IOException e) {
             plugin.getLogger().severe("Failed to restore schematic: " + resourcePath);
-            e.printStackTrace();
+            logger.error("Failed to restore schematic: {}", file.getName(), e);
         }
     }
 }

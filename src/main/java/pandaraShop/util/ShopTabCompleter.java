@@ -24,12 +24,11 @@ public class ShopTabCompleter implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         // Check if the sender is a player
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             return Collections.emptyList(); // No suggestions for non-players
         }
 
         List<String> suggestions = new ArrayList<>();
-        Player player = (Player) sender;
 
         // Handle the first argument
         if (args.length == 1) {

@@ -10,6 +10,7 @@ import pandaraShop.Main;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 public class CreateFile {
@@ -22,7 +23,7 @@ public class CreateFile {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) {return;}
 
-        file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), string + ".yml"); //Creates a physical file in the pandaraShop folder
+        file = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop")).getDataFolder(), string + ".yml"); //Creates a physical file in the pandaraShop folder
         if (!file.exists()) {
             try {
                 file.createNewFile();

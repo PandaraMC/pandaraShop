@@ -27,7 +27,7 @@ public class YmlManager {
             this.config.save(this.file);
             return true;
         } catch(Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to save the file: {}", file.getName(), e);
             return false;
         }
     }
