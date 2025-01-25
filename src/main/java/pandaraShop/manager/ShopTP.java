@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.util.UUID;
 
-public class shopTP {
+public class ShopTP {
 
     private static File file;
     private static FileConfiguration editFile;

@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-public class createFile {
+public class CreateFile {
 
     private static File file;
     private static FileConfiguration editFile;

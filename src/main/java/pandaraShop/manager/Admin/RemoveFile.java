@@ -9,7 +9,7 @@ import pandaraShop.Main;
 import java.io.File;
 import java.util.UUID;
 
-public class removeFile {
+public class RemoveFile {
 
     private static File file;
     private static FileConfiguration editFile;

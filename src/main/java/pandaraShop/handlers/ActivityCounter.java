@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import pandaraShop.Main;
-import pandaraShop.manager.unrentShop;
+import pandaraShop.manager.UnrentShop;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,13 +23,13 @@ import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class activityCounter implements Listener {
+public class ActivityCounter implements Listener {
 
     private static File file;
     private static FileConfiguration editFile;
 
     //Counts & update shop owner's activities in days and remove unmaintained shops
-    public activityCounter() {
+    public ActivityCounter() {
 
         new BukkitRunnable() {
             @Override
@@ -88,7 +88,7 @@ public class activityCounter implements Listener {
                                     RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
                                     RegionManager regions = container.get(BukkitAdapter.adapt(Bukkit.getWorld("shop")));
                                     try {
-                                        unrentShop.onUnrent(UUID.fromString(owner),regions);
+                                        UnrentShop.onUnrent(UUID.fromString(owner),regions);
                                     } catch (WorldEditException e) {
                                         throw new RuntimeException(e);
                                     }

@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.util.UUID;
 
-public class membersManager {
+public class MembersManager {
 
     private static File file;
     private static FileConfiguration editFile;

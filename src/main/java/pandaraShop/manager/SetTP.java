@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-public class setTP {
+public class SetTP {
 
     private static File file;
     private static FileConfiguration editFile;

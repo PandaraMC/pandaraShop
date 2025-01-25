@@ -10,12 +10,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import pandaraShop.Main;
-import pandaraShop.manager.Admin.createFile;
+import pandaraShop.manager.Admin.CreateFile;
 
 import java.util.Arrays;
 import java.util.UUID;
 
-public class rentShop {
+public class RentShop {
 
     public static void onRent(UUID uuid, RegionManager regions) {
 
@@ -50,7 +50,7 @@ public class rentShop {
                         int x = ((region.getMaximumPoint().getBlockX()+region.getMinimumPoint().getBlockX())/2);
                         int y = ((region.getMaximumPoint().getBlockY()+region.getMinimumPoint().getBlockY())/2);
                         int z = ((region.getMaximumPoint().getBlockZ()+region.getMinimumPoint().getBlockZ())/2);
-                        createFile.autoCreate(player.getUniqueId(),x,y,z,"large");
+                        CreateFile.autoCreate(player.getUniqueId(),x,y,z,"large");
                         region.setFlag(Flags.GREET_MESSAGE,"&3Welcome to &4" + string + " &3's Shop'!");
                         player.sendMessage(ChatColor.GREEN + "You now rent this shop. Type /shop terms to read the terms of your rent!");
                     }
@@ -67,7 +67,7 @@ public class rentShop {
                         int x = ((region.getMaximumPoint().getBlockX()+region.getMinimumPoint().getBlockX())/2);
                         int y = ((region.getMaximumPoint().getBlockY()+region.getMinimumPoint().getBlockY())/2);
                         int z = ((region.getMaximumPoint().getBlockZ()+region.getMinimumPoint().getBlockZ())/2);
-                        createFile.autoCreate(player.getUniqueId(),x,y,z,"small");
+                        CreateFile.autoCreate(player.getUniqueId(),x,y,z,"small");
                         region.setFlag(Flags.GREET_MESSAGE,"&3Welcome to &4" + string + " &3's Shop'!");
                         player.sendMessage(ChatColor.GREEN + "You now rent this shop. Type /shop terms to read the terms of your rent!");
                     }

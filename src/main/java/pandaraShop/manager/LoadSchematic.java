@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class loadSchematic {
+public class LoadSchematic {
 
     private static File file;
 

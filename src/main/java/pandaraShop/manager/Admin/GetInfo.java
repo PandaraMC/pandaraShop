@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class getInfo {
+public class GetInfo {
 
     private static File file;
     private static FileConfiguration editFile;

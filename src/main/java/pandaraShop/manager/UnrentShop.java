@@ -13,13 +13,13 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import pandaraShop.Main;
-import pandaraShop.manager.Admin.restoreFlags;
+import pandaraShop.manager.Admin.RestoreFlags;
 
 import java.io.File;
 import java.util.Random;
 import java.util.UUID;
 
-public class unrentShop {
+public class UnrentShop {
 
     private static File file;
     private static FileConfiguration editFile;
@@ -72,11 +72,11 @@ public class unrentShop {
                         }
                     }
                 }
-                restoreFlags.consoleRestore(regions);
+                RestoreFlags.consoleRestore(regions);
                 if (region.getId().toLowerCase().contains("shopa0") || region.getId().toLowerCase().contains("shopb0") || region.getId().toLowerCase().contains("shopc0") || region.getId().toLowerCase().contains("shopd0")) {
-                    loadSchematic.place(min,"large");
+                    LoadSchematic.place(min,"large");
                 } else {
-                    loadSchematic.place(min,"small");
+                    LoadSchematic.place(min,"small");
                 }
                 file.delete();
                 player.sendMessage(ChatColor.GREEN + "Your shop has been successfully deleted");

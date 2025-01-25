@@ -7,7 +7,7 @@ import pandaraShop.Main;
 
 import java.util.UUID;
 
-public class listFiles {
+public class ListFiles {
 
     public static void check(UUID uuid) {
 

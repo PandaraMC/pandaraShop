@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class shopOwnersList {
+public class ShopOwnersList {
 
     static ArrayList<String> list = new ArrayList<>();
     private static File file;

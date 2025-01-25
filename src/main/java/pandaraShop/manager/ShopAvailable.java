@@ -11,11 +11,10 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
-public class shopAvailable {
+public class ShopAvailable {
 
     private static File file;
     private static FileConfiguration editFile;

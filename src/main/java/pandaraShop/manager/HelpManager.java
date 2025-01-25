@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class helpManager {
+public class HelpManager {
 
     public static void onRequest(UUID uuid) {
 

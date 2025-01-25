@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class shopTabCompleter implements TabCompleter {
+public class ShopTabCompleter implements TabCompleter {
 
     private List<String> getOnlinePlayerNames() {
         List<String> playerNames = new ArrayList<>();

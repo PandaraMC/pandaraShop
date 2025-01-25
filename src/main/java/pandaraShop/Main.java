@@ -2,11 +2,11 @@ package pandaraShop;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import pandaraShop.commands.shopCommandManager;
+import pandaraShop.commands.ShopCommandManager;
 import pandaraShop.util.SchematicManager;
-import pandaraShop.util.shopTabCompleter;
-import pandaraShop.commands.shopWorldTP;
-import pandaraShop.handlers.activityCounter;
+import pandaraShop.util.ShopTabCompleter;
+import pandaraShop.commands.ShopWorldTP;
+import pandaraShop.handlers.ActivityCounter;
 import pandaraShop.util.YmlManager;
 
 public final class Main extends JavaPlugin {
@@ -42,20 +42,20 @@ public final class Main extends JavaPlugin {
 
     private void registerCommands() {
         if (getCommand("shop") != null) {
-            getCommand("shop").setExecutor(new shopCommandManager());
-            getCommand("shop").setTabCompleter(new shopTabCompleter());
+            getCommand("shop").setExecutor(new ShopCommandManager());
+            getCommand("shop").setTabCompleter(new ShopTabCompleter());
         } else {
             Bukkit.getLogger().severe("Command 'shop' not found in plugin.yml!");
         }
         if (getCommand("shopworld") != null) {
-            getCommand("shopworld").setExecutor(new shopWorldTP());
+            getCommand("shopworld").setExecutor(new ShopWorldTP());
         } else {
             Bukkit.getLogger().severe("Command 'shopworld' not found in plugin.yml!");
         }
     }
 
     private void registerEventListeners() {
-        Bukkit.getPluginManager().registerEvents(new activityCounter(), this);
+        Bukkit.getPluginManager().registerEvents(new ActivityCounter(), this);
     }
 
     @Override

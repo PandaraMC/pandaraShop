@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class checkTime {
+public class CheckTime {
 
     private static String filename;
     private static File file;
