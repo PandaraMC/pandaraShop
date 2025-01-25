@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import static com.sk89q.worldedit.WorldEdit.logger;
+
 public class SetTP {
 
     public static void setTP(UUID uuid) {
@@ -38,7 +40,7 @@ public class SetTP {
             try {
                 editFile.save(file);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Failed to save the file: {}", file.getName(), e);
             }
             player.sendMessage(ChatColor.GREEN+ "Your shop TP has been successfully updated");
             player.sendMessage(ChatColor.GREEN+ "Type /shop " +ChatColor.GOLD+player.getName()+ChatColor.GREEN+ " to teleport to it.");

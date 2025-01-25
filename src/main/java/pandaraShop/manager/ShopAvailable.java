@@ -6,11 +6,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -23,7 +23,7 @@ public class ShopAvailable {
         ArrayList<String> unrentedList = new ArrayList<>();
         int i = 0;
 
-        File file = file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), uuid + ".yml");
+        File file = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop")).getDataFolder(), uuid + ".yml");
 
         for (Object names : regions.getRegions().keySet().toArray()) {
             if (names.toString().toLowerCase().contains("shop")) {
@@ -51,7 +51,7 @@ public class ShopAvailable {
         ProtectedRegion rg = regions.getRegion(string);
         if (rg == null) {return;}
         int x = (rg.getMaximumPoint().getBlockX()+rg.getMinimumPoint().getBlockX())/2;
-        int y = (rg.getMaximumPoint().getBlockY()+rg.getMinimumPoint().getBlockY())/2;
+        //int y = (rg.getMaximumPoint().getBlockY()+rg.getMinimumPoint().getBlockY())/2;
         int z = (rg.getMaximumPoint().getBlockZ()+rg.getMinimumPoint().getBlockZ())/2;
         World world = Bukkit.getWorld("shop");
         if (world == null) {return;}

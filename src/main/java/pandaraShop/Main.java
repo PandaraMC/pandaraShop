@@ -3,11 +3,10 @@ package pandaraShop;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import pandaraShop.commands.ShopCommandManager;
-import pandaraShop.util.SchematicManager;
-import pandaraShop.util.ShopTabCompleter;
 import pandaraShop.commands.ShopWorldTP;
 import pandaraShop.handlers.ActivityCounter;
-import pandaraShop.util.YmlManager;
+import pandaraShop.util.SchematicManager;
+import pandaraShop.util.ShopTabCompleter;
 
 public final class Main extends JavaPlugin {
 
