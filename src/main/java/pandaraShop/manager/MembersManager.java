@@ -23,7 +23,7 @@ public class MembersManager {
         Player player = Bukkit.getPlayer(uuid);
         Player member = Bukkit.getPlayerExact(string);
         if (player != null) {
-            if (player.getLocation().getWorld().getName().equalsIgnoreCase("shop")) {
+            if (player.getLocation().getWorld().getName().contains("shop")) {
                 file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), player.getUniqueId() + ".yml");
                 if (file.exists()) {
                     if (member != null) {
@@ -87,7 +87,7 @@ public class MembersManager {
         Player player = Bukkit.getPlayer(uuid);
         Player member = Bukkit.getPlayerExact(string);
         if (player != null) {
-            if (player.getLocation().getWorld().getName().equalsIgnoreCase("shop")) {
+            if (player.getLocation().getWorld().getName().contains("shop")) {
                 file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), player.getUniqueId() + ".yml");
                 if (file.exists()) {
                     if (member != null) {

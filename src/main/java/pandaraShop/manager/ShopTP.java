@@ -13,25 +13,40 @@ import java.util.UUID;
 
 public class ShopTP {
 
-    public static void tpMe(UUID uuid, UUID targ) {
+    public static void tpMe(UUID uuid, String target) {
 
         Player player = Bukkit.getPlayer(uuid);
-        Player shop = Bukkit.getPlayer(targ);
+        if (player == null) return;
 
-        if (player != null && shop != null) {
-            File file = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop")).getDataFolder(), shop.getUniqueId() + ".yml");
+        File shopFolder = Objects.requireNonNull(
+                Bukkit.getPluginManager().getPlugin("pandaraShop")
+        ).getDataFolder();
 
-            if (file.exists()) {
-                FileConfiguration editFile = YamlConfiguration.loadConfiguration(file);
+        File[] files = shopFolder.listFiles((dir, name) -> name.endsWith(".yml"));
+        if (files == null) return;
 
-                Location loc = new Location(Bukkit.getWorld("shop"), editFile.getInt("Shop.TP.x"), editFile.getInt("Shop.TP.y"), editFile.getInt("Shop.TP.z"), editFile.getInt("Shop.TP.yaw"), editFile.getInt("Shop.TP.pitch"));
+        for (File file : files) {
+            FileConfiguration shopData = YamlConfiguration.loadConfiguration(file);
 
-                player.teleport(loc);
+            if (shopData.contains("Shop.Shopname")) {
+                String storedName = shopData.getString("Shop.Shopname");
 
-            }
-            else {
-                player.sendMessage(ChatColor.GOLD+ shop.getName() + " does not own a shop. Please check it via /shop list and try again.");
+                if (storedName != null && storedName.equalsIgnoreCase(target)) {
+                    // Get TP values
+                    double x = shopData.getDouble("Shop.TP.x");
+                    double y = shopData.getDouble("Shop.TP.y");
+                    double z = shopData.getDouble("Shop.TP.z");
+                    float yaw = (float) shopData.getDouble("Shop.TP.yaw");
+                    float pitch = (float) shopData.getDouble("Shop.TP.pitch");
+
+                    Location tpLocation = new Location(Bukkit.getWorld("shop"), x, y, z, yaw, pitch);
+                    player.teleport(tpLocation);
+                    player.sendMessage(ChatColor.GREEN + "You've been teleported to shop: " + storedName);
+                    return;
+                }
             }
         }
+
+        player.sendMessage(ChatColor.RED + "No shop found with the name '" + target + "'. Check spelling or use /shop list.");
     }
 }

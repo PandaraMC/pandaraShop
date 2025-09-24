@@ -41,17 +41,18 @@ public class RentShop {
 
                 }
                 if (region.getId().toLowerCase().contains("shopa0") || region.getId().toLowerCase().contains("shopb0") || region.getId().toLowerCase().contains("shopc0") || region.getId().toLowerCase().contains("shopd0")) {
-                    if (player.hasPermission("pandara.ultra")) {
+                    if (player.hasPermission("pandara.ultra") || player.isOp()) {
                         // rent stuff
                         DefaultDomain members = region.getMembers();
                         members.addPlayer(player.getUniqueId());
+                        region.setOwners(members);
                         region.setMembers(members);
                         String string = player.getName();
                         int x = ((region.getMaximumPoint().getBlockX()+region.getMinimumPoint().getBlockX())/2);
                         int y = ((region.getMaximumPoint().getBlockY()+region.getMinimumPoint().getBlockY())/2);
                         int z = ((region.getMaximumPoint().getBlockZ()+region.getMinimumPoint().getBlockZ())/2);
                         CreateFile.autoCreate(player.getUniqueId(),x,y,z,"large");
-                        region.setFlag(Flags.GREET_MESSAGE,"&3Welcome to &4" + string + " &3's Shop'!");
+                        region.setFlag(Flags.GREET_MESSAGE,"&3Welcome to &2" + string + " &3's Shop'!");
                         player.sendMessage(ChatColor.GREEN + "You now rent this shop. Type /shop terms to read the terms of your rent!");
                     }
                     else {
@@ -59,16 +60,17 @@ public class RentShop {
                     }
                 }
                 else {
-                    if (!player.hasPermission("pandara.ultra")) {
+                    if (!player.hasPermission("pandara.ultra") || player.isOp()) {
                         DefaultDomain members = region.getMembers();
                         members.addPlayer(player.getUniqueId());
+                        region.setOwners(members);
                         region.setMembers(members);
                         String string = player.getName();
                         int x = ((region.getMaximumPoint().getBlockX()+region.getMinimumPoint().getBlockX())/2);
                         int y = ((region.getMaximumPoint().getBlockY()+region.getMinimumPoint().getBlockY())/2);
                         int z = ((region.getMaximumPoint().getBlockZ()+region.getMinimumPoint().getBlockZ())/2);
                         CreateFile.autoCreate(player.getUniqueId(),x,y,z,"small");
-                        region.setFlag(Flags.GREET_MESSAGE,"&3Welcome to &4" + string + " &3's Shop'!");
+                        region.setFlag(Flags.GREET_MESSAGE,"&3Welcome to &c" + string + " &3's Shop'!");
                         player.sendMessage(ChatColor.GREEN + "You now rent this shop. Type /shop terms to read the terms of your rent!");
                     }
                     else {

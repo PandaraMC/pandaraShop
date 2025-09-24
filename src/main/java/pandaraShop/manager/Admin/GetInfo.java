@@ -90,6 +90,13 @@ public class GetInfo {
             player.sendMessage(ChatColor.AQUA + " " + rentedList.toString().replace("[", "").replace("]",""));
             player.sendMessage(ChatColor.GOLD + "----- UNRENTED SHOP REGIONS -----");
             player.sendMessage(ChatColor.GRAY + " " + unrentedList.toString().replace("[", "").replace("]",""));
+            player.sendMessage(" ");
+            player.sendMessage(ChatColor.GOLD + ">> SHOP REGION LIST");
+            player.sendMessage(ChatColor.GREEN + "There are currently ");
+            player.sendMessage(ChatColor.GOLD + String.valueOf(rented) + ChatColor.AQUA + " rented shops and");
+            player.sendMessage(ChatColor.GOLD + String.valueOf(unrented) + ChatColor.GRAY + " unrented shops.");
+            player.sendMessage(ChatColor.GREEN + "For a total of "+ ChatColor.GOLD+u+ChatColor.GREEN+" ultra and "+ChatColor.GOLD+r+ChatColor.GREEN+" regular shops!");
+            player.sendMessage(" ");
         }
     }
 }

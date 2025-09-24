@@ -2,11 +2,15 @@ package pandaraShop.commands;
 
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -47,81 +51,103 @@ public class ShopCommandManager implements CommandExecutor {
         }
 
         if (args.length == 1) {
-            // Commands below are available for all players -----------------------------------------------------------
-            Player target = Bukkit.getPlayer(args[0]);
-            if (target != null) {
-                ShopTP.tpMe(player.getUniqueId(),target.getUniqueId());
-            } else {
-                switch (args[0].toLowerCase()) {
-                    case "rent":
-                        //Rent a shop
-                        RentShop.onRent(player.getUniqueId(),regions);
-                        break;
-                    case "unrent":
-                        //Unrent a shop
+            String arg = args[0].toLowerCase();
+            switch (arg) {
+                case "rent":
+                    if (!player.hasPermission("pandara.settler")) {
+                        player.sendMessage(ChatColor.RED + "You must be rank SETTLER to rent a shop.");
+                        return true;
+                    }
+                    RentShop.onRent(player.getUniqueId(), regions);
+                    break;
+                case "unrent":
+                    try {
+                        UnrentShop.onUnrent(player.getUniqueId(), regions);
+                    } catch (WorldEditException e) {
+                        Bukkit.getLogger().severe("Error during shop unrent: " + e.getMessage());
+                    }
+                    break;
+                case "help":
+                    HelpManager.onRequest(player.getUniqueId());
+                    break;
+                case "settp":
+                    SetTP.setTP(player.getUniqueId());
+                    break;
+                case "list":
+                    ShopOwnersList.listMe(player.getUniqueId());
+                    break;
+                case "available":
+                    ShopAvailable.rtp(player.getUniqueId(), regions);
+                    break;
+                case "terms":
+                    HelpManager.onTerms(player.getUniqueId());
+                    break;
+                case "checktime":
+                    CheckTime.checkMe(player.getUniqueId(), player.getName());
+                    break;
+                case "info":
+                    GetInfo.checkMe(player.getUniqueId(), regions);
+                    break;
+                case "restoreflags":
+                    if (player.hasPermission("pandara.manager")) {
+                        RestoreFlags.restore(player.getUniqueId(), regions);
+                    } else {
+                        player.sendMessage(ChatColor.RED + "You don't look like you have this permission...");
+                    }
+                    break;
+                case "listfiles":
+                    if (player.hasPermission("pandara.manager")) {
+                        ListFiles.check(player.getUniqueId());
+                    } else {
+                        player.sendMessage(ChatColor.RED + "You don't look like you have this permission...");
+                    }
+                    break;
+                case "restore":
+                    Location loc = player.getLocation();
+                    ApplicableRegionSet regionSet = regions.getApplicableRegions(
+                            BlockVector3.at(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())
+                    );
+
+                    ProtectedRegion standingRegion = null;
+                    for (ProtectedRegion region : regionSet) {
+                        if (region.getId().toLowerCase().startsWith("shop")) {
+                            standingRegion = region;
+                            break;
+                        }
+                    }
+
+                    if (standingRegion == null) {
+                        player.sendMessage(ChatColor.RED + "You are not standing inside a shop region.");
+                        return true; // stop execution
+                    }
+
+                    if (player.hasPermission("pandara.manager")) {
+
                         try {
-                            UnrentShop.onUnrent(player.getUniqueId(),regions);
+                            UnrentShop.onAdminUnrent(player.getUniqueId(),regions, standingRegion);
                         } catch (WorldEditException e) {
-                            Bukkit.getLogger().severe("Error during shop unrent: " + e.getMessage());
+                            throw new RuntimeException(e);
                         }
+
                         break;
-                    case "help":
-                        //Display help for user
-                        HelpManager.onRequest(player.getUniqueId());
+
+                    } else {
+                        player.sendMessage(ChatColor.RED + "You don't look like you have this permission...");
                         break;
-                    case "settp":
-                        //Set shop tp (Player)
-                        SetTP.setTP(player.getUniqueId());
-                        break;
-                    case "list":
-                        //List names of shop owners
-                        ShopOwnersList.listMe(player.getUniqueId());
-                        break;
-                    case "available":
-                        //Random TP to an available shop
-                        ShopAvailable.rtp(player.getUniqueId(),regions);
-                        break;
-                    case "terms":
-                        //Shop terms
-                        HelpManager.onTerms(player.getUniqueId());
-                        break;
-                    case "checktime":
-                        //Check rented time of sender's shop
-                        CheckTime.checkMe(player.getUniqueId(),player.getName());
-                        break;
-                    // Commands for Managers --------------------------------------------------------------------------
-                    case "info":
-                        // Count the shops and list which shops are rented and unrented.
-                        if (player.hasPermission("pandara.manager")) {
-                            GetInfo.checkMe(player.getUniqueId(),regions);
-                        } else {
-                            player.sendMessage(ChatColor.RED + "You don't look like you have this permission...");
-                            return true;
-                        }
-                        break;
-                    case "restoreflags":
-                        // Set flags to default for all un-rented shops.
-                        if (player.hasPermission("pandara.manager")) {
-                            RestoreFlags.restore(player.getUniqueId(), regions);
-                        } else {
-                            player.sendMessage(ChatColor.RED + "You don't look like you have this permission...");
-                            return true;
-                        }
-                        break;
-                    case "listfiles":
-                        //List all files in folder
-                        if (player.hasPermission("pandara.manager")) {
-                            ListFiles.check(player.getUniqueId());
-                        } else {
-                            player.sendMessage(ChatColor.RED + "You don't look like you have this permission...");
-                            return true;
-                        }
-                        break;
-                    default:
-                        player.sendMessage(ChatColor.RED + "Unknown command. Type /shop help for a list of commands.");
-                        break;
-                }
+                    }
+                case "cleanfiles":
+                    if (player.hasPermission("pandara.manager")) {
+                        RemoveFile.cleanFiles();
+                    } else {
+                        player.sendMessage(ChatColor.RED + "You don't look like you have this permission...");
+                    }
+                    break;
+                default:
+                    // Only try teleport if it's not a known subcommand
+                    ShopTP.tpMe(player.getUniqueId(), arg);
+                    break;
             }
+            return true;
         }
         if (args.length == 2) {
             String string = args[1];

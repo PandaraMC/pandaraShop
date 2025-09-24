@@ -8,6 +8,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import pandaraShop.Main;
 
 import java.util.UUID;
 
@@ -38,6 +39,14 @@ public class RestoreFlags {
 
                     rg.setFlag(Flags.CHEST_ACCESS, StateFlag.State.ALLOW);
                     rg.setFlag(Flags.CHEST_ACCESS.getRegionGroupFlag(),RegionGroup.MEMBERS);
+
+                    rg.setFlag(Flags.INTERACT, StateFlag.State.ALLOW);
+                    rg.setFlag(Flags.INTERACT.getRegionGroupFlag(),RegionGroup.MEMBERS);
+
+                    if (Main.ALLOW_SHOP != null) {
+                        rg.setFlag(Main.ALLOW_SHOP, StateFlag.State.ALLOW);
+                        rg.setFlag(Main.ALLOW_SHOP.getRegionGroupFlag(),RegionGroup.MEMBERS);
+                    }
 
                     if (names.toString().toLowerCase().contains("shopa0") || names.toString().toLowerCase().contains("shopb0") || names.toString().toLowerCase().contains("shopc0") || names.toString().toLowerCase().contains("shopd0")) {
                         if (!rg.hasMembersOrOwners()) {
@@ -78,6 +87,14 @@ public class RestoreFlags {
 
                     rg.setFlag(Flags.CHEST_ACCESS, StateFlag.State.ALLOW);
                     rg.setFlag(Flags.CHEST_ACCESS.getRegionGroupFlag(),RegionGroup.MEMBERS);
+
+                    rg.setFlag(Flags.INTERACT, StateFlag.State.ALLOW);
+                    rg.setFlag(Flags.INTERACT.getRegionGroupFlag(),RegionGroup.MEMBERS);
+
+                    if (Main.ALLOW_SHOP != null) {
+                        rg.setFlag(Main.ALLOW_SHOP, StateFlag.State.ALLOW);
+                        rg.setFlag(Main.ALLOW_SHOP.getRegionGroupFlag(),RegionGroup.MEMBERS);
+                    }
 
                     if (names.toString().toLowerCase().contains("shopa0") || names.toString().toLowerCase().contains("shopb0") || names.toString().toLowerCase().contains("shopc0")) {
                         if (!rg.hasMembersOrOwners()) {

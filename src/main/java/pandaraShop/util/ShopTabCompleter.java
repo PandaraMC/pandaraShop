@@ -20,7 +20,6 @@ public class ShopTabCompleter implements TabCompleter {
         return playerNames;
     }
 
-
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         // Check if the sender is a player
@@ -30,13 +29,20 @@ public class ShopTabCompleter implements TabCompleter {
 
         List<String> suggestions = new ArrayList<>();
 
-        // Handle the first argument
+        // Handle the first argument (subcommands or player names)
         if (args.length == 1) {
-            // Add subcommands based on the player's permissions
+            // Collect all possible subcommands
             if (player.hasPermission("pandara.manager")) {
+                suggestions.add("cleanfiles");
                 suggestions.add("info");
                 suggestions.add("restoreflags");
+                suggestions.add("restore");
                 suggestions.add("listfiles");
+            }
+            if (player.isOp()) {
+                suggestions.add("create");
+                suggestions.add("remove");
+                suggestions.add("reloadschem");
             }
             if (player.hasPermission("pandara.staff")) {
                 suggestions.add("checktime");
@@ -47,21 +53,24 @@ public class ShopTabCompleter implements TabCompleter {
             suggestions.add("available");
             suggestions.add("terms");
 
-            // Filter suggestions based on the current input
+            // Combine subcommands with online player names
+            suggestions.addAll(getOnlinePlayerNames());
+
+            // Filter based on current input
             return filterSuggestions(args[0], suggestions);
         }
 
-        // Handle the second argument (e.g., player names or custom options)
+        // Handle the second argument (specific subcommands with player names)
         if (args.length == 2) {
             switch (args[0].toLowerCase()) {
                 case "invite":
                 case "uninvite":
                 case "checktime":
-                    // Suggest online player names for these commands
+                    // Only suggest player names for these subcommands
                     suggestions.addAll(getOnlinePlayerNames());
-                    break;
+                    return filterSuggestions(args[1], suggestions);
                 default:
-                    return Collections.emptyList(); // No suggestions for other cases
+                    return Collections.emptyList(); // No suggestions for other subcommands
             }
         }
 

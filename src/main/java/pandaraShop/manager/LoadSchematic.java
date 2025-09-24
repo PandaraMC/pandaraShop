@@ -28,8 +28,11 @@ public class LoadSchematic {
         if (world == null) {return;}
 
         File file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), "/schematics/" + size + ".schem");
+        Bukkit.getLogger().info("File loaded " + file);
         Clipboard clipboard = null;
+        Bukkit.getLogger().info("Clipboard " + clipboard);
         ClipboardFormat format = ClipboardFormats.findByFile(file);
+        Bukkit.getLogger().info("Clipboardformat " + format);
 
         int x = loc.getBlockX();
         int y = loc.getBlockY();
@@ -37,8 +40,7 @@ public class LoadSchematic {
 
         try (ClipboardReader reader = format.getReader(new FileInputStream(file))) {
             clipboard = reader.read();
-            Bukkit.getLogger().info("Test01");
-            Bukkit.getLogger().info("Name: " + format.getPrimaryFileExtension());
+            Bukkit.getLogger().info("Clipboard loaded for a shop reset");
             Bukkit.getLogger().info("Clipboard min point: " + clipboard.getMinimumPoint());
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,6 +58,7 @@ public class LoadSchematic {
                     // configure here
                     .build();
             Operations.complete(operation);
+            Bukkit.getLogger().info("Shop reset at X:" + x + " Y:" + y + " Z:" + z);
         }
     }
 

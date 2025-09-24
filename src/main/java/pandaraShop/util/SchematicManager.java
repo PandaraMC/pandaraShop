@@ -33,6 +33,8 @@ public class SchematicManager {
             if (!targetFile.exists()) {
                 plugin.getLogger().warning("Schematic file missing: " + schematicFile + ". Restoring...");
                 copyResourceToFile("schematics/" + schematicFile, targetFile);
+            } else {
+                plugin.getLogger().info("Schematic file exists: " + schematicFile + ". Skipping restoration.");
             }
         }
     }
@@ -42,7 +44,7 @@ public class SchematicManager {
              FileOutputStream out = new FileOutputStream(targetFile)) {
 
             if (in == null) {
-                plugin.getLogger().severe("Failed to find resource: " + resourcePath);
+                plugin.getLogger().severe("Resource not found: " + resourcePath);
                 return;
             }
 
@@ -52,10 +54,15 @@ public class SchematicManager {
                 out.write(buffer, 0, length);
             }
 
-            plugin.getLogger().info("Successfully restored " + targetFile.getName());
+            if (targetFile.length() > 0) {
+                plugin.getLogger().info("Successfully restored " + targetFile.getName() + " (" + targetFile.length() + " bytes).");
+            } else {
+                plugin.getLogger().severe("Copied schematic file is empty: " + targetFile.getName());
+            }
         } catch (IOException e) {
             plugin.getLogger().severe("Failed to restore schematic: " + resourcePath);
             e.printStackTrace();
         }
     }
+
 }

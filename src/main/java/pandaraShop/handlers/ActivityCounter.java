@@ -30,6 +30,7 @@ public class ActivityCounter implements Listener {
 
     private static File file;
     private static FileConfiguration editFile;
+    private boolean isUnrented = false;
 
     //Counts & update shop owner's activities in days and remove unmaintained shops
     public ActivityCounter() {
@@ -40,7 +41,7 @@ public class ActivityCounter implements Listener {
 
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (player != null) {
-                        if (player.getLocation().getWorld() != null && player.getLocation().getWorld().getName().equalsIgnoreCase("shop")) {
+                        if (player.getLocation().getWorld() != null && player.getLocation().getWorld().getName().contains("shop")) {
                             file = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop")).getDataFolder(), player.getUniqueId() + ".yml");
                             if (file.exists()) {
                                 RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
@@ -87,11 +88,13 @@ public class ActivityCounter implements Listener {
                                 //result -= TimeUnit.HOURS.toMillis(h);
                                 //long m = TimeUnit.MILLISECONDS.toMinutes(result);
 
-                                if (d >= 30) {
+                                if (d >= 30 && !isUnrented) {
                                     RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
                                     RegionManager regions = container.get(BukkitAdapter.adapt(Bukkit.getWorld("shop")));
+
                                     try {
-                                        UnrentShop.onUnrent(UUID.fromString(owner),regions);
+                                        UnrentShop.onUnrent(UUID.fromString(owner), regions);
+                                        isUnrented = true; // ✅ Prevent future triggers
                                     } catch (WorldEditException e) {
                                         throw new RuntimeException(e);
                                     }

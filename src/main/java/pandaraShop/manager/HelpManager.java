@@ -24,6 +24,7 @@ public class HelpManager {
             player.sendMessage(ChatColor.AQUA + "/shop create [NAME] \n" + ChatColor.GREEN + "     - Manually create a shop file for test purposes.");
             player.sendMessage(ChatColor.AQUA + "/shop remove [FILENAME] \n" + ChatColor.GREEN + "     - PERMANENTLY delete a shop file." + ChatColor.RED + " CAUTION IS ADVISED!");
             player.sendMessage(ChatColor.AQUA + "/shop listfiles \n" + ChatColor.GREEN + "     - Lists all shop files in the server.");
+            player.sendMessage(ChatColor.AQUA + "/shop restore \n" + ChatColor.GREEN + "     - Unrent and restore another player's shop.");
         }
         if (player.hasPermission("pandara.staff")) {
             player.sendMessage(ChatColor.AQUA + "/shop checktime [NAME] \n" + ChatColor.GREEN + "     - Shows the length of time since last owner activity.");
@@ -54,7 +55,7 @@ public class HelpManager {
         player.sendMessage(ChatColor.GOLD+ "   4) "+ChatColor.GREEN+"NO chunk hoppers allowed.");
         player.sendMessage(ChatColor.GOLD+ "   5) "+ChatColor.GREEN+"Lost items due to shop being unrented or \n       removed through inactivity cannot be \n       recovered.");
         player.sendMessage(ChatColor.GOLD+ "   4) "+ChatColor.GREEN+"You can add 2 additional members to your shop.");
-        player.sendMessage(ChatColor.GOLD+ "   6) "+ChatColor.GREEN+"Aditional members of a shop cannot unrent it. \n       However, they will have all the same permissions \n       as you for everything else. \n       Add members at your own peril. ");
+        player.sendMessage(ChatColor.GOLD+ "   6) "+ChatColor.GREEN+"Additional members of a shop cannot unrent it. \n       However, they will have all the same permissions \n       as you for everything else. \n       Add members at your own peril. ");
         player.sendMessage(ChatColor.GOLD+ "   7) "+ChatColor.GREEN+"Grief or lost items caused by additional shop \n       members cannot be recovered.");
         player.sendMessage(" ");
 
