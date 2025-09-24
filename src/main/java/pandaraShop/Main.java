@@ -64,6 +64,8 @@ public final class Main extends JavaPlugin {
         } else {
             getLogger().warning("Could not find the allow-shop flag. Is Shopkeepers installed?");
         }
+
+        new ActivityCounter(this).start();
     }
 
     private void registerCommands() {
@@ -81,7 +83,7 @@ public final class Main extends JavaPlugin {
     }
 
     private void registerEventListeners() {
-        Bukkit.getPluginManager().registerEvents(new ActivityCounter(), this);
+        //Bukkit.getPluginManager().registerEvents(new ActivityCounter(), this);
     }
 
     @Override

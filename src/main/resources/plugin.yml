@@ -1,14 +1,33 @@
 name: pandaraShop
 version: '${project.version}'
 main: pandaraShop.Main
-api-version: 1.19
-authors: [ CheekyPandaBoy ]
+api-version: '1.21'
+authors: [CheekyPandaBoy]
 description: A shop plugin for Pandara
+
 softdepend:
   - WorldGuard
+  - WorldEdit
   - Shopkeepers
+
 commands:
   shop:
     description: General shop command. It must be followed by an option.
+    usage: /shop <rent|unrent|invite|uninvite|available|info|checktime|restore|restoreflags|listfiles|cleanfiles|help|terms>
   shopworld:
     description: Teleports the player to the shop world.
+    usage: /shopworld
+
+permissions:
+  pandara.settler:
+    description: Allows renting of normal shops
+    default: true
+  pandara.ultra:
+    description: Allows renting of ULTRA shops
+    default: false
+  pandara.staff:
+    description: Grants staff utilities (unrenting, cleaning, etc.)
+    default: op
+  pandara.manager:
+    description: Grants admin/manager utilities
+    default: op
