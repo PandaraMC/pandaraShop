@@ -17,7 +17,8 @@ public class ShopOwnersList {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return;
 
-        File shopDir = new File(Main.getInstance().getDataFolder(), "shops");
+        File shopDir = Main.getShopsDir();
+
         File[] files = shopDir.listFiles((dir, name) -> name.endsWith(".yml"));
 
         List<String> owners = new ArrayList<>();

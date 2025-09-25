@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import pandaraShop.Main;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,7 +63,8 @@ public class ShopAvailable {
         player.teleport(loc);
 
         // Message based on whether the player already owns a shop file
-        File shopFile = new File(Bukkit.getPluginManager().getPlugin("pandaraShop").getDataFolder(), "shops/" + uuid + ".yml");
+        File shopFile = new File(Main.getShopsDir(), uuid + ".yml");
+
         if (shopFile.exists()) {
             player.sendMessage(ChatColor.GREEN + "You already rent a shop, but here’s a random available one!");
         } else {

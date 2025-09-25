@@ -127,16 +127,12 @@ public class YmlManager {
     }
 
     public void ensureShopsFolderExists() {
-        File shopsFolder = new File(main.getDataFolder(), "shops");
-
-        if (!shopsFolder.exists()) {
-            if (shopsFolder.mkdirs()) {
-                main.getLogger().info("Created 'shops' folder successfully.");
-            } else {
-                main.getLogger().warning("Failed to create 'shops' folder.");
-            }
-        } else {
+        File shopsFolder = Main.getShopsDir(); // centralize path creation
+        if (shopsFolder.exists()) {
             main.getLogger().info("'shops' folder already exists.");
+        } else {
+            main.getLogger().warning("Failed to create 'shops' folder.");
         }
     }
+
 }

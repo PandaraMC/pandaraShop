@@ -15,7 +15,8 @@ public class ListFiles {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return;
 
-        File dir = new File(Main.getInstance().getDataFolder(), "shops");
+        File dir = Main.getShopsDir();
+
         if (!dir.exists()) {
             player.sendMessage(ChatColor.RED + "Shops folder does not exist.");
             return;

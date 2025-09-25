@@ -14,6 +14,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import pandaraShop.Main;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +36,8 @@ public class SetTP {
             return;
         }
 
-        File file = new File(Bukkit.getPluginManager().getPlugin("pandaraShop").getDataFolder(), "shops/" + player.getUniqueId() + ".yml");
+        File file = new File(Main.getShopsDir(), player.getUniqueId() + ".yml");
+
         if (!file.exists()) {
             player.sendMessage(ChatColor.GOLD + "You don't own a shop.");
             return;

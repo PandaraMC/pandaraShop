@@ -7,9 +7,9 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import pandaraShop.Main;
 
 import java.io.File;
-import java.util.Objects;
 import java.util.UUID;
 
 public class ShopTP {
@@ -24,8 +24,8 @@ public class ShopTP {
             return;
         }
 
-        File shopsDir = new File(Objects.requireNonNull(
-                Bukkit.getPluginManager().getPlugin("pandaraShop")).getDataFolder(), "shops");
+        File shopsDir = Main.getShopsDir();
+
         File[] files = shopsDir.listFiles((dir, name) -> name.endsWith(".yml"));
         if (files == null) {
             player.sendMessage(ChatColor.RED + "No shops data found.");

@@ -83,7 +83,7 @@ public class ShopCommandManager implements CommandExecutor {
                     HelpManager.onTerms(player.getUniqueId());
                     break;
                 case "checktime":
-                    CheckTime.checkMe(player.getUniqueId(), player.getName());
+                    CheckTime.checkMe(player.getUniqueId());
                     break;
                 case "info":
                     GetInfo.checkMe(player.getUniqueId(), regions);
@@ -174,7 +174,7 @@ public class ShopCommandManager implements CommandExecutor {
                 case "checktime":
                     //Check rented time of player's shop
                     if (player.hasPermission("pandara.staff")) {
-                        CheckTime.checkMe(player.getUniqueId(),string);
+                        CheckTime.checkMe(player.getUniqueId());
                     } else {
                         player.sendMessage(ChatColor.RED + "You don't look like you have this permission...");
                         return true;

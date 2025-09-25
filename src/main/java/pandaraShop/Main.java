@@ -13,6 +13,8 @@ import pandaraShop.util.SchematicManager;
 import pandaraShop.util.ShopTabCompleter;
 import pandaraShop.util.YmlManager;
 
+import java.io.File;
+
 public final class Main extends JavaPlugin {
 
     public static Main plugin;
@@ -82,6 +84,15 @@ public final class Main extends JavaPlugin {
 
     private void registerEventListeners() {
         Bukkit.getPluginManager().registerEvents(new ActivityCounter(), this);
+    }
+
+    public static File getShopsDir() {
+        File dir = new File(getInstance().getDataFolder(), "shops");
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return dir;
     }
 
     @Override

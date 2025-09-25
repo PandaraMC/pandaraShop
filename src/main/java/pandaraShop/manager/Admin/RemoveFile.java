@@ -18,8 +18,8 @@ public class RemoveFile {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return;
 
-        File file = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("pandaraShop"))
-                .getDataFolder(), "shops/" + name + ".yml");
+        File file = new File(Main.getShopsDir(), name + ".yml");
+
         if (!file.exists()) {
             player.sendMessage(ChatColor.GOLD + "File does not exist, please try again!");
             return;
@@ -36,7 +36,8 @@ public class RemoveFile {
     }
 
     public static void cleanFiles() {
-        File shopDir = new File(Main.getInstance().getDataFolder(), "shops");
+        File shopDir = Main.getShopsDir();
+
         if (!shopDir.exists() || !shopDir.isDirectory()) {
             Bukkit.getLogger().warning("No shops directory found!");
             return;
