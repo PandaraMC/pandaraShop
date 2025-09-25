@@ -13,25 +13,18 @@ import java.util.List;
 public class ShopTabCompleter implements TabCompleter {
 
     private List<String> getOnlinePlayerNames() {
-        List<String> playerNames = new ArrayList<>();
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            playerNames.add(onlinePlayer.getName());
-        }
-        return playerNames;
+        List<String> names = new ArrayList<>();
+        for (Player p : Bukkit.getOnlinePlayers()) names.add(p.getName());
+        return names;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        // Check if the sender is a player
-        if (!(sender instanceof Player player)) {
-            return Collections.emptyList(); // No suggestions for non-players
-        }
+        if (!(sender instanceof Player player)) return Collections.emptyList();
 
         List<String> suggestions = new ArrayList<>();
 
-        // Handle the first argument (subcommands or player names)
         if (args.length == 1) {
-            // Collect all possible subcommands
             if (player.hasPermission("pandara.manager")) {
                 suggestions.add("cleanfiles");
                 suggestions.add("info");
@@ -53,38 +46,31 @@ public class ShopTabCompleter implements TabCompleter {
             suggestions.add("available");
             suggestions.add("terms");
 
-            // Combine subcommands with online player names
             suggestions.addAll(getOnlinePlayerNames());
-
-            // Filter based on current input
             return filterSuggestions(args[0], suggestions);
         }
 
-        // Handle the second argument (specific subcommands with player names)
         if (args.length == 2) {
             switch (args[0].toLowerCase()) {
                 case "invite":
                 case "uninvite":
                 case "checktime":
-                    // Only suggest player names for these subcommands
                     suggestions.addAll(getOnlinePlayerNames());
                     return filterSuggestions(args[1], suggestions);
                 default:
-                    return Collections.emptyList(); // No suggestions for other subcommands
+                    return Collections.emptyList();
             }
         }
 
-        return Collections.emptyList(); // No suggestions for other argument lengths
+        return Collections.emptyList();
     }
 
-    // Utility method to filter suggestions
     private List<String> filterSuggestions(String input, List<String> suggestions) {
-        List<String> filtered = new ArrayList<>();
-        for (String suggestion : suggestions) {
-            if (suggestion.toLowerCase().startsWith(input.toLowerCase())) {
-                filtered.add(suggestion);
-            }
+        List<String> out = new ArrayList<>();
+        String lower = input.toLowerCase();
+        for (String s : suggestions) {
+            if (s.toLowerCase().startsWith(lower)) out.add(s);
         }
-        return filtered;
+        return out;
     }
 }

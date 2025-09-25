@@ -14,28 +14,33 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class CreateFile {
-
     private static File file;
     private static FileConfiguration editFile;
 
-    public static void manualCreate(UUID uuid, String string) {
-
+    public static void manualCreate(UUID uuid, String name) {
         Player player = Bukkit.getPlayer(uuid);
-        if (player == null) {return;}
+        if (player == null) return;
 
-        file = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop")).getDataFolder(), string + ".yml"); //Creates a physical file in the pandaraShop folder
+        File shopsDir = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("pandaraShop")).getDataFolder(), "shops");
+        if (!shopsDir.exists()) shopsDir.mkdirs();
+
+        file = new File(shopsDir, name + ".yml");
         if (!file.exists()) {
             try {
-                file.createNewFile();
-                player.sendMessage(ChatColor.GREEN + "New file created.");
+                if (file.createNewFile()) {
+                    player.sendMessage(ChatColor.GREEN + "New file created.");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
+                player.sendMessage(ChatColor.RED + "Failed to create file.");
+                return;
             }
             Main.getInstance().saveConfig();
-            editFile = YamlConfiguration.loadConfiguration(file); //Allows for editing the file.
-            long minutes = System.currentTimeMillis();
+
+            editFile = YamlConfiguration.loadConfiguration(file);
+            long now = System.currentTimeMillis();
             Location loc = player.getLocation();
-            editFile.set("Shop.Date", minutes);
+            editFile.set("Shop.Date", now);
             editFile.set("Shop.Owner", player.getUniqueId().toString());
             editFile.set("Shop.Shopname", player.getName());
             editFile.set("Shop.TP.x", loc.getX());
@@ -48,34 +53,38 @@ public class CreateFile {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            player.sendMessage(ChatColor.GOLD + "File already exists.");
         }
     }
 
     public static void autoCreate(UUID uuid, int x, int y, int z, String size) {
-
         Player player = Bukkit.getPlayer(uuid);
-        if (player == null) {return;}
+        if (player == null) return;
 
-        file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), uuid + ".yml"); //Creates a physical file in the pandaraShop folder
+        File shopsDir = new File(Bukkit.getPluginManager().getPlugin("pandaraShop").getDataFolder(), "shops");
+        if (!shopsDir.exists()) shopsDir.mkdirs();
+
+        file = new File(shopsDir, uuid + ".yml");
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                //player.sendMessage(ChatColor.GREEN + "New file created.");
-            } catch (IOException e)  {
+            } catch (IOException e) {
                 e.printStackTrace();
+                return;
             }
             Main.getInstance().saveConfig();
-            editFile = YamlConfiguration.loadConfiguration(file); //Allows for editing the file.
-            long minutes = System.currentTimeMillis();
-            Location loc = player.getLocation();
+            editFile = YamlConfiguration.loadConfiguration(file);
 
-            editFile.set("Shop.Date", minutes);
-            editFile.set("Shop.Owner",uuid.toString());
-            editFile.set("Shop.Shopname",player.getName());
-            editFile.set("Shop.Size",size);
-            editFile.set("Shop.Center.x",x);
-            editFile.set("Shop.Center.y",y);
-            editFile.set("Shop.Center.z",z);
+            long now = System.currentTimeMillis();
+            Location loc = player.getLocation();
+            editFile.set("Shop.Date", now);
+            editFile.set("Shop.Owner", uuid.toString());
+            editFile.set("Shop.Shopname", player.getName());
+            editFile.set("Shop.Size", size);
+            editFile.set("Shop.Center.x", x);
+            editFile.set("Shop.Center.y", y);
+            editFile.set("Shop.Center.z", z);
             editFile.set("Shop.TP.x", loc.getBlockX());
             editFile.set("Shop.TP.y", loc.getBlockY());
             editFile.set("Shop.TP.z", loc.getBlockZ());
@@ -83,11 +92,10 @@ public class CreateFile {
             editFile.set("Shop.TP.pitch", loc.getPitch());
             try {
                 editFile.save(file);
-            } catch (IOException e)  {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             player.sendMessage(ChatColor.GOLD + "Player already rents a shop, please unrent it and try again!");
         }
     }

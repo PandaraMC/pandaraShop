@@ -19,57 +19,65 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-import static com.sk89q.worldedit.WorldEdit.logger;
-
 public class SetTP {
 
-    private static final World world = Bukkit.getWorld("shop");
-
     public static void setTP(UUID uuid) {
-
         Player player = Bukkit.getPlayer(uuid);
-        File file = new File(Bukkit.getServer().getPluginManager().getPlugin("pandaraShop").getDataFolder(), player.getUniqueId() + ".yml");
-        Location loc = player.getLocation();
+        if (player == null) return;
 
-
-        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionManager regions = container.get(BukkitAdapter.adapt(world));
-        ApplicableRegionSet applicableRegionSet = regions.getApplicableRegions(BlockVector3.at(player.getLocation().getBlockX(),player.getLocation().getBlockY(),player.getLocation().getBlockZ()));
-
-        if (!loc.getWorld().toString().contains("shop")) {
+        World world = Bukkit.getWorld("shop");
+        if (world == null) {
+            player.sendMessage(ChatColor.RED + "The shop world is not loaded.");
+            return;
+        }
+        if (!"shop".equalsIgnoreCase(player.getWorld().getName())) {
             player.sendMessage(ChatColor.RED + "You must be in the shop world to set a shop teleport!");
             return;
         }
 
+        File file = new File(Bukkit.getPluginManager().getPlugin("pandaraShop").getDataFolder(), "shops/" + player.getUniqueId() + ".yml");
         if (!file.exists()) {
             player.sendMessage(ChatColor.GOLD + "You don't own a shop.");
             return;
         }
 
-        for (ProtectedRegion region : applicableRegionSet.getRegions()) {
-            if (region.hasMembersOrOwners()) {
-                if (!region.getMembers().contains(player.getUniqueId())) {
-                    player.sendMessage(ChatColor.RED + "You must be within your own shop!");
-                    return;
-                }
-                else {
-                    FileConfiguration editFile = YamlConfiguration.loadConfiguration(file);
+        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+        RegionManager regions = container.get(BukkitAdapter.adapt(world));
+        if (regions == null) {
+            player.sendMessage(ChatColor.RED + "Region manager not found.");
+            return;
+        }
 
-                    editFile.set("Shop.TP.x",loc.getX());
-                    editFile.set("Shop.TP.y",loc.getY());
-                    editFile.set("Shop.TP.z",loc.getZ());
-                    editFile.set("Shop.TP.yaw",loc.getYaw());
-                    editFile.set("Shop.TP.pitch",loc.getPitch());
-                    try {
-                        editFile.save(file);
-                    } catch (IOException e) {
-                        logger.error("Failed to save the file: {}", file.getName(), e);
-                    }
-                    player.sendMessage(ChatColor.GREEN+ "Your shop TP has been successfully updated");
-                    player.sendMessage(ChatColor.GREEN+ "Type /shop " +ChatColor.GOLD+player.getName()+ChatColor.GREEN+ " to teleport to it.");
-                }
+        ApplicableRegionSet set = regions.getApplicableRegions(BlockVector3.at(
+                player.getLocation().getBlockX(),
+                player.getLocation().getBlockY(),
+                player.getLocation().getBlockZ()));
 
+        boolean insideOwnShop = false;
+        for (ProtectedRegion region : set) {
+            if (region.hasMembersOrOwners() && region.getOwners().contains(player.getUniqueId())) {
+                insideOwnShop = true;
+                break;
             }
+        }
+        if (!insideOwnShop) {
+            player.sendMessage(ChatColor.RED + "You must be within your own shop!");
+            return;
+        }
+
+        Location loc = player.getLocation();
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+        cfg.set("Shop.TP.x", loc.getX());
+        cfg.set("Shop.TP.y", loc.getY());
+        cfg.set("Shop.TP.z", loc.getZ());
+        cfg.set("Shop.TP.yaw", loc.getYaw());
+        cfg.set("Shop.TP.pitch", loc.getPitch());
+        try {
+            cfg.save(file);
+            player.sendMessage(ChatColor.GREEN + "Your shop TP has been successfully updated");
+            player.sendMessage(ChatColor.GREEN + "Type /shop " + ChatColor.GOLD + player.getName() + ChatColor.GREEN + " to teleport to it.");
+        } catch (IOException e) {
+            player.sendMessage(ChatColor.RED + "Failed to save your shop TP; contact staff.");
         }
     }
 }

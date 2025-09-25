@@ -7,7 +7,6 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.sk89q.worldguard.protection.regions.RegionContainer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,83 +24,97 @@ import java.util.concurrent.TimeUnit;
 
 public class ActivityCounter implements Listener {
 
-    private final Main plugin;
+    private final Main plugin = Main.getInstance();
+    private final File shopsDir;
 
-    public ActivityCounter(Main plugin) {
-        this.plugin = plugin;
-    }
-
-    // Start repeating task
-    public void start() {
+    public ActivityCounter() {
+        this.shopsDir = new File(plugin.getDataFolder(), "shops");
+        // Run on the main thread to remain Bukkit/WorldGuard safe
         new BukkitRunnable() {
             @Override
             public void run() {
-                World shopWorld = Bukkit.getWorld("shop");
-                if (shopWorld == null) return;
-
-                RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-                RegionManager regions = container.get(BukkitAdapter.adapt(shopWorld));
-                if (regions == null) return;
-
-                long now = System.currentTimeMillis();
-
-                // ✅ Part 1: Update active players' shop date
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (!player.getWorld().equals(shopWorld)) continue;
-
-                    ApplicableRegionSet ars = regions.getApplicableRegions(
-                            BlockVector3.at(player.getLocation().getBlockX(),
-                                    player.getLocation().getBlockY(),
-                                    player.getLocation().getBlockZ()));
-
-                    for (ProtectedRegion region : ars.getRegions()) {
-                        if (region.hasMembersOrOwners() && region.getMembers().contains(player.getUniqueId())) {
-                            File file = new File(plugin.getDataFolder(), player.getUniqueId() + ".yml");
-                            if (!file.exists()) continue;
-
-                            FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-                            cfg.set("Shop.Date", now);
-
-                            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                                try {
-                                    cfg.save(file);
-                                } catch (IOException e) {
-                                    plugin.getLogger().warning("Failed to save shop file " + file.getName() + ": " + e.getMessage());
-                                }
-                            });
-                        }
-                    }
-                }
-
-                // ✅ Part 2: Check for expired shops
-                File[] files = plugin.getDataFolder().listFiles((dir, name) -> name.endsWith(".yml"));
-                if (files == null) return;
-
-                for (File file : files) {
-                    FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-
-                    if (!cfg.contains("Shop.Shopname") || !cfg.contains("Shop.Date") || !cfg.contains("Shop.Owner"))
-                        continue;
-
-                    long then = cfg.getLong("Shop.Date", now);
-                    long days = TimeUnit.MILLISECONDS.toDays(now - then);
-
-                    if (days >= 30) {
-                        String ownerStr = cfg.getString("Shop.Owner");
-                        if (ownerStr == null) continue;
-
-                        try {
-                            UUID owner = UUID.fromString(ownerStr);
-                            UnrentShop.onUnrent(owner, regions);
-                        } catch (IllegalArgumentException e) {
-                            plugin.getLogger().warning("Invalid UUID in " + file.getName());
-                        } catch (WorldEditException e) {
-                            plugin.getLogger().severe("WorldEdit error while unrenting " + file.getName());
-                            e.printStackTrace();
-                        }
-                    }
+                try {
+                    updateOwnerActivityIfInShop();
+                    unrentExpiredShops();
+                } catch (Exception ex) {
+                    plugin.getLogger().severe("ActivityCounter task error: " + ex.getMessage());
+                    ex.printStackTrace();
                 }
             }
-        }.runTaskTimer(plugin, 20L * 30, 20L * 30); // run every 30s
+        }.runTaskTimer(plugin, 20L * 60L, 20L * 60L); // every 60s
+    }
+
+    private void updateOwnerActivityIfInShop() {
+        World shopWorld = Bukkit.getWorld("shop");
+        if (shopWorld == null) return;
+
+        RegionManager regions = WorldGuard.getInstance()
+                .getPlatform().getRegionContainer()
+                .get(BukkitAdapter.adapt(shopWorld));
+        if (regions == null) return;
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!player.isOnline() || player.getWorld() != shopWorld) continue;
+
+            ApplicableRegionSet set = regions.getApplicableRegions(BlockVector3.at(
+                    player.getLocation().getBlockX(),
+                    player.getLocation().getBlockY(),
+                    player.getLocation().getBlockZ()));
+
+            boolean isOwnerHere = false;
+            for (ProtectedRegion region : set) {
+                if (region.getOwners().contains(player.getUniqueId())) {
+                    isOwnerHere = true;
+                    break;
+                }
+            }
+            if (!isOwnerHere) continue;
+
+            File f = new File(shopsDir, player.getUniqueId() + ".yml");
+            if (!f.exists()) continue;
+
+            FileConfiguration cfg = YamlConfiguration.loadConfiguration(f);
+            cfg.set("Shop.Date", System.currentTimeMillis());
+            try {
+                cfg.save(f);
+            } catch (IOException e) {
+                plugin.getLogger().severe("Failed to save shop file: " + f.getName());
+            }
+        }
+    }
+
+    private void unrentExpiredShops() {
+        World shopWorld = Bukkit.getWorld("shop");
+        if (shopWorld == null) return;
+
+        RegionManager regions = WorldGuard.getInstance()
+                .getPlatform().getRegionContainer()
+                .get(BukkitAdapter.adapt(shopWorld));
+        if (regions == null) return;
+
+        File[] files = shopsDir.listFiles((dir, name) -> name.endsWith(".yml"));
+        if (files == null) return;
+
+        long now = System.currentTimeMillis();
+        long cutoff = TimeUnit.DAYS.toMillis(30);
+
+        for (File f : files) {
+            FileConfiguration cfg = YamlConfiguration.loadConfiguration(f);
+            if (!cfg.contains("Shop.Date") || !cfg.contains("Shop.Owner")) continue;
+
+            long then = cfg.getLong("Shop.Date", 0L);
+            if (then <= 0L) continue;
+
+            if ((now - then) >= cutoff) {
+                String ownerStr = cfg.getString("Shop.Owner");
+                if (ownerStr == null) continue;
+                try {
+                    UUID owner = UUID.fromString(ownerStr);
+                    UnrentShop.onUnrent(owner, regions); // runs on main thread
+                } catch (WorldEditException | IllegalArgumentException ex) {
+                    plugin.getLogger().warning("Failed to auto-unrent " + f.getName() + ": " + ex.getMessage());
+                }
+            }
+        }
     }
 }
